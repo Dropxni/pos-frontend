@@ -1,0 +1,86 @@
+/* Fondo suave, con textura ligera para frescura */
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background: linear-gradient(135deg, #f9f9f9 0%, #d9f1f0 100%);
+  padding: 1rem;
+  box-sizing: border-box;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Formulario con fondo crema, bordes suaves y sombra ligera */
+.login-form {
+  background: #fffef7; /* color crema claro */
+  padding: 2.5rem 3rem;
+  border-radius: 16px;
+  width: 100%;
+  max-width: 400px;
+  box-sizing: border-box;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.3s ease;
+}
+
+.login-form:hover {
+  box-shadow: 0 12px 30px rgba(109, 165, 153, 0.35);
+}
+
+.login-title {
+  margin-bottom: 1.8rem;
+  font-weight: 700;
+  font-size: 2rem;
+  color: #3b5d49; /* verde oscuro natural */
+  text-align: center;
+  letter-spacing: 1px;
+  font-family: 'Georgia', serif;
+}
+
+.full-width {
+  width: 100%;
+}
+
+/* Inputs con borde azul suave y fondo muy claro */
+.mat-form-field-appearance-fill .mat-form-field-flex {
+  background-color: #f0f7f7 !important;
+  border-radius: 8px;
+}
+
+.mat-input-element {
+  font-size: 1.1rem;
+  color: #2e4d42; /* verde suave */
+}
+
+/* Botón en un verde azulado, con redondeo y transición */
+.login-button {
+  margin-top: 2rem;
+  padding: 0.85rem 0;
+  font-weight: 600;
+  font-size: 1.1rem;
+  border-radius: 30px;
+  background-color: #5aa897 !important;
+  color: white !important;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 5px 10px rgba(90, 168, 151, 0.4);
+}
+
+.login-button:hover {
+  background-color: #488a7d !important;
+  box-shadow: 0 8px 15px rgba(72, 138, 125, 0.5);
+}
+
+/* Responsive para móviles */
+@media (max-width: 480px) {
+  .login-form {
+    padding: 2rem 1.5rem;
+    border-radius: 12px;
+  }
+
+  .login-title {
+    font-size: 1.5rem;
+  }
+
+  .login-button {
+    font-size: 1rem;
+  }
+}
