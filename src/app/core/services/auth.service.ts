@@ -1,6 +1,8 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject, PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import axios from 'axios';
 import { jwtDecode } from 'jwt-decode';
+import { environment } from '../../../environments/environment';
 
 interface TokenPayload {
   id: number;
@@ -14,11 +16,15 @@ interface TokenPayload {
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  private api = 'http://localhost:3000/api';
+  private api = environment.apiUrl;
+  private isBrowser: boolean;
   token: string | null = null;
 
   constructor() {
-    if (typeof window !== 'undefined' && window.localStorage) {
+    const platformId = inject(PLATFORM_ID);
+    this.isBrowser = isPlatformBrowser(platformId);
+
+    if (this.isBrowser) {
       this.token = localStorage.getItem('token');
     }
   }
@@ -27,7 +33,7 @@ export class AuthService {
     try {
       const res = await axios.post(`${this.api}/auth/login`, { email, password });
       this.token = res.data.token;
-      if (typeof window !== 'undefined' && window.localStorage) {
+      if (this.isBrowser) {
         localStorage.setItem('token', this.token!);
       }
       return true;
@@ -38,7 +44,7 @@ export class AuthService {
 
   logout() {
     this.token = null;
-    if (typeof window !== 'undefined' && window.localStorage) {
+    if (this.isBrowser) {
       localStorage.removeItem('token');
     }
   }

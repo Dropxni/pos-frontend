@@ -1,13 +1,17 @@
 import { Component } from '@angular/core';
 import { AuthService } from '../../core/services/auth.service';
 import { Router } from '@angular/router';
-import { NgIf, NgFor } from '@angular/common';
+import { NgIf, NgFor, NgClass } from '@angular/common';
 import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-navbar',
   standalone: true,
-  imports: [RouterLink, NgIf],
+  imports: [
+    NgIf,
+    RouterLink,
+    NgClass
+],
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.css']
 })
@@ -32,7 +36,7 @@ export class NavbarComponent {
 
   isGerenteOrAdmin(): boolean {
     const role = this.auth.getUserRole();
-    return role === 'gerente' || role === 'admin';
+    return role === 'gerente' || role === 'administrador';
   }
 
   isGerente(): boolean {
@@ -40,6 +44,6 @@ export class NavbarComponent {
   }
 
   isAdmin(): boolean {
-    return this.auth.getUserRole() === 'admin';
+    return this.auth.getUserRole() === 'administrador';
   }
 }

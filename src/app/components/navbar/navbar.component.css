@@ -26,6 +26,9 @@
     font-size: 1.5rem;
     color: #2c5d52;
     text-decoration: none;
+    -webkit-user-select: none;
+    -webkit-user-select: none;
+    -webkit-user-select: none;
     user-select: none;
   }
   

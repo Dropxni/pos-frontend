@@ -1,0 +1,76 @@
+<div *ngIf="cargando" class="text-center text-gray-500 py-6">Cargando datos del usuario...</div>
+
+<form
+  *ngIf="!cargando"
+  (ngSubmit)="guardarCambios()"
+  class="max-w-2xl mx-auto bg-white shadow-md rounded-xl p-6 space-y-5 border border-gray-200"
+>
+
+  <h2 class="text-2xl font-semibold text-gray-800 mb-4">Editar Usuario</h2>
+
+  <div *ngIf="error" class="bg-red-100 text-red-700 px-4 py-2 rounded-md">{{ error }}</div>
+  <div *ngIf="exito" class="bg-green-100 text-green-700 px-4 py-2 rounded-md">{{ exito }}</div>
+
+  <div>
+    <label class="block mb-1 text-sm font-medium text-gray-700">Nombre de usuario</label>
+    <input [(ngModel)]="usuario.nombre_usuario" name="nombre_usuario" required
+      class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
+  </div>
+
+  <div>
+    <label class="block mb-1 text-sm font-medium text-gray-700">Correo electrónico</label>
+    <input type="email" [(ngModel)]="usuario.email" name="email" required
+      class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
+  </div>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div>
+      <label class="block mb-1 text-sm font-medium text-gray-700">Nombre</label>
+      <input [(ngModel)]="usuario.nombre" name="nombre" required
+        class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
+    </div>
+
+    <div>
+      <label class="block mb-1 text-sm font-medium text-gray-700">Apellidos</label>
+      <input [(ngModel)]="usuario.apellidos" name="apellidos" required
+        class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
+    </div>
+  </div>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div>
+      <label class="block mb-1 text-sm font-medium text-gray-700">Teléfono</label>
+      <input [(ngModel)]="usuario.telefono" name="telefono"
+        class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
+    </div>
+
+    <div>
+      <label class="block mb-1 text-sm font-medium text-gray-700">Código empleado</label>
+      <input [(ngModel)]="usuario.codigo_empleado" name="codigo_empleado"
+        class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
+    </div>
+  </div>
+
+  <div>
+    <label class="block mb-1 text-sm font-medium text-gray-700">Sucursal</label>
+    <select [(ngModel)]="usuario.sucursal_id" name="sucursal_id" required
+      class="w-full px-3 py-2 border rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+      <option [ngValue]="null">Selecciona una sucursal</option>
+      <option *ngFor="let s of sucursales" [value]="s.id">{{ s.nombre }}</option>
+    </select>
+  </div>
+
+  <div>
+    <label class="block mb-1 text-sm font-medium text-gray-700">Rol</label>
+    <select [(ngModel)]="usuario.rol_id" name="rol_id" required
+      class="w-full px-3 py-2 border rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+      <option [ngValue]="null">Selecciona un rol</option>
+      <option *ngFor="let r of roles" [value]="r.id">{{ r.nombre }}</option>
+    </select>
+  </div>
+
+  <button [disabled]="guardando"
+    class="w-full mt-4 bg-blue-600 text-white font-semibold py-2 rounded-lg hover:bg-blue-700 transition">
+    {{ guardando ? 'Guardando...' : 'Guardar Cambios' }}
+  </button>
+</form>

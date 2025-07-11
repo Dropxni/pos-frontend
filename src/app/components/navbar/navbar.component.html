@@ -1,20 +1,72 @@
-<nav class="navbar">
-  <div class="container">
-    <a class="logo" routerLink="/dashboard">Cremería <span class="highlight">Oaxaca</span></a>
+<nav class="bg-white border-b shadow-md fixed w-full z-50">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex justify-between h-16 items-center">
+      <!-- Logo -->
+      <div class="flex items-center">
+        <a routerLink="/dashboard" class="text-xl font-bold text-gray-800 hover:text-blue-600">
+          Cremería <span class="text-blue-600">Oaxaca</span>
+        </a>
+      </div>
 
-    <button class="menu-toggle" (click)="toggleMenu()" aria-label="Toggle navigation">
-      <span [class.open]="menuOpen"></span>
-      <span [class.open]="menuOpen"></span>
-      <span [class.open]="menuOpen"></span>
-    </button>
+      <!-- Menu toggle (mobile) -->
+      <div class="flex lg:hidden">
+        <button (click)="toggleMenu()" aria-label="Toggle navigation"
+          class="inline-flex items-center justify-center p-2 rounded-md text-gray-600 hover:text-blue-600 focus:outline-none">
+          <svg class="h-6 w-6" [ngClass]="{ 'hidden': menuOpen, 'block': !menuOpen }" fill="none"
+            stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round"
+              d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+          <svg class="h-6 w-6" [ngClass]="{ 'block': menuOpen, 'hidden': !menuOpen }" fill="none"
+            stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round"
+              d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
 
-    <ul [class.open]="menuOpen" class="nav-links">
-      <li><a routerLink="/dashboard" routerLinkActive="active-link" (click)="closeMenu()">Inicio</a></li>
-      <li *ngIf="isGerenteOrAdmin()"><a routerLink="/ventas" routerLinkActive="active-link" (click)="closeMenu()">Ventas</a></li>
-      <li *ngIf="isGerenteOrAdmin()"><a routerLink="/inventario" routerLinkActive="active-link" (click)="closeMenu()">Inventario</a></li>
-      <li *ngIf="isGerente()"><a routerLink="/reportes" routerLinkActive="active-link" (click)="closeMenu()">Reportes</a></li>
-      <li *ngIf="isAdmin()"><a routerLink="/usuarios" routerLinkActive="active-link" (click)="closeMenu()">Usuarios</a></li>
-      <li><a href="#" (click)="logout()">Cerrar sesión</a></li>
-    </ul>
+      <!-- Links -->
+      <div class="hidden lg:flex space-x-6 items-center">
+        <a routerLink="/dashboard" routerLinkActive="text-blue-600 font-semibold"
+          class="text-gray-700 hover:text-blue-600 transition">Inicio</a>
+
+        <a *ngIf="isGerenteOrAdmin()" routerLink="/ventas" routerLinkActive="text-blue-600 font-semibold"
+          class="text-gray-700 hover:text-blue-600 transition">Ventas</a>
+
+        <a *ngIf="isGerenteOrAdmin()" routerLink="/inventario" routerLinkActive="text-blue-600 font-semibold"
+          class="text-gray-700 hover:text-blue-600 transition">Inventario</a>
+
+        <a *ngIf="isGerente()" routerLink="/reportes" routerLinkActive="text-blue-600 font-semibold"
+          class="text-gray-700 hover:text-blue-600 transition">Reportes</a>
+
+        <a *ngIf="isAdmin()" routerLink="/usuarios" routerLinkActive="text-blue-600 font-semibold"
+          class="text-gray-700 hover:text-blue-600 transition">Usuarios</a>
+
+        <a href="#" (click)="logout()" class="text-red-500 hover:text-red-600 transition font-medium">Cerrar sesión</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mobile menu -->
+  <div class="lg:hidden" [ngClass]="{ 'block': menuOpen, 'hidden': !menuOpen }">
+    <div class="px-4 pt-2 pb-4 space-y-2 bg-white border-t border-gray-200">
+      <a routerLink="/dashboard" (click)="closeMenu()"
+        class="block text-gray-700 hover:text-blue-600 transition">Inicio</a>
+
+      <a *ngIf="isGerenteOrAdmin()" routerLink="/ventas" (click)="closeMenu()"
+        class="block text-gray-700 hover:text-blue-600 transition">Ventas</a>
+
+      <a *ngIf="isGerenteOrAdmin()" routerLink="/inventario" (click)="closeMenu()"
+        class="block text-gray-700 hover:text-blue-600 transition">Inventario</a>
+
+      <a *ngIf="isGerente()" routerLink="/reportes" (click)="closeMenu()"
+        class="block text-gray-700 hover:text-blue-600 transition">Reportes</a>
+
+      <a *ngIf="isAdmin()" routerLink="/usuarios" (click)="closeMenu()"
+        class="block text-gray-700 hover:text-blue-600 transition">Usuarios</a>
+
+      <a href="#" (click)="logout()"
+        class="block text-red-500 hover:text-red-600 transition font-medium">Cerrar sesión</a>
+    </div>
   </div>
 </nav>

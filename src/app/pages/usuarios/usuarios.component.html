@@ -1,0 +1,121 @@
+<section class="space-y-8">
+  <!-- Header con título y botón -->
+  <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+    <div>
+      <h2 class="text-3xl font-extrabold text-gray-800 tracking-tight">Gestión de Usuarios</h2>
+      <p class="text-sm text-gray-500">Administra usuarios, roles y accesos del sistema POS.</p>
+    </div>
+
+    <button
+      [routerLink]="['/usuarios/nuevo']"
+      class="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 rounded-xl text-sm font-medium shadow-md transition"
+    >
+      <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+      </svg>
+      Nuevo Usuario
+    </button>
+  </div>
+
+  <!-- Filtros -->
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+    <input
+      type="text"
+      [(ngModel)]="filtros.nombre"
+      (input)="filtrarUsuarios()"
+      placeholder="Buscar por nombre..."
+      class="w-full px-4 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
+    />
+
+    <select [(ngModel)]="filtros.rol" (change)="filtrarUsuarios()"
+      class="w-full px-4 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
+      <option value="">Todos los roles</option>
+      <option *ngFor="let rol of roles" [value]="rol.nombre">{{ rol.nombre }}</option>
+    </select>
+
+    <select [(ngModel)]="filtros.sucursal" (change)="filtrarUsuarios()"
+      class="w-full px-4 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
+      <option value="">Todas las sucursales</option>
+      <option *ngFor="let suc of sucursales" [value]="suc.nombre">{{ suc.nombre }}</option>
+    </select>
+
+    <select [(ngModel)]="filtros.estado" (change)="filtrarUsuarios()"
+      class="w-full px-4 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
+      <option value="">Todos</option>
+      <option value="activo">Activos</option>
+      <option value="inactivo">Inactivos</option>
+    </select>
+  </div>
+
+  <!-- Cargando -->
+  <div *ngIf="loading" class="text-center text-blue-600 font-semibold mt-6">Cargando usuarios...</div>
+
+  <!-- Tabla de usuarios -->
+  <div *ngIf="!loading && usuariosFiltrados.length > 0" class="overflow-x-auto rounded-xl shadow ring-1 ring-gray-200 mt-4 bg-white">
+    <table class="min-w-full divide-y divide-gray-200 text-sm">
+      <thead class="bg-blue-50 text-gray-700">
+        <tr>
+          <th class="px-6 py-3 text-left font-medium">Nombre</th>
+          <th class="px-6 py-3 text-left font-medium">Rol</th>
+          <th class="px-6 py-3 text-left font-medium">Sucursal</th>
+          <th class="px-6 py-3 text-left font-medium">Estado</th>
+          <th class="px-6 py-3 text-center font-medium">Acciones</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-gray-100 bg-white">
+        <tr *ngFor="let usuario of usuariosFiltrados" class="hover:bg-gray-50">
+          <td class="px-6 py-3 text-gray-800">{{ usuario.nombre }}</td>
+          <td class="px-6 py-3">{{ usuario.roles?.nombre }}</td>
+          <td class="px-6 py-3">{{ usuario.sucursales?.nombre }}</td>
+          <td class="px-6 py-3">
+            <span [ngClass]="usuario.activo ? 'text-green-600 font-semibold' : 'text-red-500 font-semibold'">
+              {{ usuario.activo ? 'Activo' : 'Inactivo' }}
+            </span>
+          </td>
+          <td class="px-6 py-3 text-center space-x-2">
+            <!-- Botón Editar -->
+            <a
+              [routerLink]="['/usuarios/editar', usuario.id]"
+              class="inline-flex items-center gap-1 text-blue-600 hover:text-blue-800 font-medium transition text-sm"
+            >
+              <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M15.232 5.232l3.536 3.536M9 11l6-6 3 3-6 6H9v-3z" />
+              </svg>
+              Editar
+            </a>
+
+            <!-- Botón Estado -->
+            <button
+              (click)="cambiarEstado(usuario)"
+              class="inline-flex items-center gap-1 text-yellow-600 hover:text-yellow-800 font-medium transition text-sm"
+            >
+              <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2v6" />
+              </svg>
+              {{ usuario.activo ? 'Desactivar' : 'Activar' }}
+            </button>
+
+            <!-- Botón Eliminar -->
+            <button
+              (click)="eliminar(usuario.id)"
+              class="inline-flex items-center gap-1 text-red-600 hover:text-red-800 font-medium transition text-sm"
+            >
+              <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M6 18L18 6M6 6l12 12" />
+              </svg>
+              Eliminar
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Sin resultados -->
+  <div *ngIf="!loading && usuariosFiltrados.length === 0" class="text-center text-gray-500 mt-6">
+    No se encontraron usuarios con los filtros seleccionados.
+  </div>
+</section>
