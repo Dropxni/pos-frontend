@@ -1,3 +1,41 @@
-<app-navbar *ngIf="showNavbar"></app-navbar>
-<div class="pt-16 px-4"></div>
-<router-outlet></router-outlet>
+<!-- Sidebar (se oculta en login) -->
+<app-sidebar *ngIf="showSidebar" [isHidden]="!showSidebar"></app-sidebar>
+
+<!-- Contenido principal -->
+<div class="transition-all duration-300"
+     [ngClass]="{ 'lg:ml-64': showSidebar, 'ml-0': !showSidebar }">
+    
+  <!-- Header fijo para desktop -->
+  <header *ngIf="showSidebar" class="bg-white shadow-sm border-b border-gray-200 h-16 hidden lg:flex items-center justify-between px-6 sticky top-0 z-40">
+    <div class="text-lg font-semibold text-gray-800">
+      <!-- Título de la página actual -->
+      <ng-container [ngSwitch]="getCurrentRoute()">
+        <span *ngSwitchCase="'dashboard'">Panel de Control</span>
+        <span *ngSwitchCase="'ventas'">Gestión de Ventas</span>
+        <span *ngSwitchCase="'inventario'">Control de Inventario</span>
+        <span *ngSwitchCase="'productos'">Gestión de Productos</span>
+        <span *ngSwitchCase="'categorias'">Gestión de Categorías</span>
+        <span *ngSwitchCase="'proveedores'">Gestión de Proveedores</span>
+        <span *ngSwitchCase="'reportes'">Reportes</span>
+        <span *ngSwitchCase="'usuarios'">Gestión de Usuarios</span>
+        <span *ngSwitchDefault>Cremería Oaxaca</span>
+      </ng-container>
+    </div>
+        
+    <!-- Información del usuario -->
+    <div class="flex items-center space-x-4">
+      <div class="text-sm text-gray-600">
+        Bienvenido, <span class="font-medium">{{ getCurrentUser() }}</span>
+      </div>
+      <div class="h-8 w-8 bg-blue-600 rounded-full flex items-center justify-center">
+        <span class="text-white text-sm font-medium">{{ getUserInitials() }}</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Contenido de las páginas (scrolleable) -->
+  <main class="min-h-screen bg-gray-50"
+        [ngClass]="{ 'p-4 lg:p-6': showSidebar, 'p-4': !showSidebar }">
+    <router-outlet></router-outlet>
+  </main>
+</div>

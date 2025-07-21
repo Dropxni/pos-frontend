@@ -12,6 +12,10 @@ interface TokenPayload {
   permisos: string[];
   iat: number;
   exp: number;
+  // Agregar campos opcionales para nombre de usuario
+  nombre?: string;
+  email?: string;
+  username?: string;
 }
 
 @Injectable({ providedIn: 'root' })
@@ -81,6 +85,53 @@ export class AuthService {
     if (!this.token) return null;
     try {
       return jwtDecode<TokenPayload>(this.token);
+    } catch {
+      return null;
+    }
+  }
+
+  getCurrentUser(): string {
+    if (!this.token) return 'Usuario';
+    
+    try {
+      const decoded = jwtDecode<TokenPayload>(this.token);
+      
+      // Intentar obtener el nombre del usuario desde el token
+      if (decoded.nombre) {
+        return decoded.nombre;
+      }
+      
+      if (decoded.email) {
+        // Si no hay nombre, usar la parte antes del @ del email
+        return decoded.email.split('@')[0];
+      }
+      
+      if (decoded.username) {
+        return decoded.username;
+      }
+      
+      // Si no hay información del usuario, mostrar el rol
+      return decoded.rol || 'Usuario';
+    } catch {
+      return 'Usuario';
+    }
+  }
+
+  getUserId(): number | null {
+    if (!this.token) return null;
+    try {
+      const decoded = jwtDecode<TokenPayload>(this.token);
+      return decoded.id;
+    } catch {
+      return null;
+    }
+  }
+
+  getUserEmail(): string | null {
+    if (!this.token) return null;
+    try {
+      const decoded = jwtDecode<TokenPayload>(this.token);
+      return decoded.email || null;
     } catch {
       return null;
     }

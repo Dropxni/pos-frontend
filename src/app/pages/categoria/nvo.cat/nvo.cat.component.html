@@ -1,0 +1,166 @@
+<div class="p-6 max-w-4xl mx-auto">
+  <!-- Encabezado -->
+  <div class="mb-6">
+    <h1 class="text-3xl font-bold text-gray-900">Nueva Categoría</h1>
+    <p class="text-gray-600 mt-2">Crear una nueva categoría para organizar los productos.</p>
+  </div>
+
+  <!-- Mensaje de error -->
+  <div *ngIf="error" class="mb-4 flex items-start gap-3 bg-red-50 border border-red-400 text-red-700 px-4 py-3 rounded-md shadow-sm">
+    <svg class="w-5 h-5 mt-1 text-red-500" fill="currentColor" viewBox="0 0 20 20">
+      <path fill-rule="evenodd" d="..." clip-rule="evenodd"></path>
+    </svg>
+    <p class="text-sm font-medium">{{ error }}</p>
+  </div>
+
+  <!-- Mensaje de éxito -->
+  <div *ngIf="exito" class="mb-4 flex items-start gap-3 bg-green-50 border border-green-400 text-green-700 px-4 py-3 rounded-md shadow-sm">
+    <svg class="w-5 h-5 mt-1 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+      <path fill-rule="evenodd" d="..." clip-rule="evenodd"></path>
+    </svg>
+    <p class="text-sm font-medium">{{ exito }}</p>
+  </div>
+
+  <!-- Formulario -->
+  <form (ngSubmit)="crearCategoria()" class="bg-white shadow-md rounded-lg p-6 space-y-6">
+
+    <!-- Grupo: Datos Generales -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div>
+        <label for="codigo" class="block text-sm font-medium text-gray-700 mb-1">
+          Código <span class="text-red-500">*</span>
+        </label>
+        <input
+          id="codigo"
+          type="text"
+          [(ngModel)]="nuevaCategoria.codigo"
+          name="codigo"
+          required
+          (input)="onInputChange()"
+          [disabled]="cargando"
+          class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+          placeholder="Ej: CAT001" />
+      </div>
+
+      <div>
+        <label for="nombre" class="block text-sm font-medium text-gray-700 mb-1">
+          Nombre <span class="text-red-500">*</span>
+        </label>
+        <input
+          id="nombre"
+          type="text"
+          [(ngModel)]="nuevaCategoria.nombre"
+          name="nombre"
+          required
+          (input)="onInputChange()"
+          [disabled]="cargando"
+          class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+          placeholder="Ej: Productos Lácteos" />
+      </div>
+
+      <div class="md:col-span-2">
+        <label for="descripcion" class="block text-sm font-medium text-gray-700 mb-1">
+          Descripción
+        </label>
+        <textarea
+          id="descripcion"
+          rows="3"
+          [(ngModel)]="nuevaCategoria.descripcion"
+          name="descripcion"
+          (input)="onInputChange()"
+          [disabled]="cargando"
+          placeholder="Descripción opcional de la categoría"
+          class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
+      </div>
+
+      <div class="md:col-span-2">
+        <label for="categoria_padre" class="block text-sm font-medium text-gray-700 mb-1">
+          Categoría Padre
+        </label>
+        <select
+          id="categoria_padre"
+          [(ngModel)]="nuevaCategoria.categoria_padre_id"
+          name="categoria_padre"
+          (change)="onInputChange()"
+          [disabled]="cargando || cargandoCategorias"
+          class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+          <option [ngValue]="null">Sin categoría padre</option>
+          <option *ngFor="let categoria of categoriasPadre" [ngValue]="categoria.id">
+            {{ categoria.codigo }} - {{ categoria.nombre }}
+          </option>
+        </select>
+        <p class="text-xs text-gray-500 mt-1">Opcional: Asignar una categoría jerárquica superior.</p>
+      </div>
+    </div>
+
+    <!-- Grupo: Opciones adicionales -->
+    <div>
+      <h3 class="text-lg font-semibold text-gray-800 mb-4">Opciones adicionales</h3>
+      <div class="space-y-4">
+        <div class="flex items-start">
+          <input
+            id="requiere_refrigeracion"
+            type="checkbox"
+            [(ngModel)]="nuevaCategoria.requiere_refrigeracion"
+            name="requiere_refrigeracion"
+            (change)="onInputChange()"
+            [disabled]="cargando"
+            class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded mt-1">
+          <label for="requiere_refrigeracion" class="ml-3 block text-sm text-gray-700">
+            <span class="font-medium">Requiere refrigeración</span><br />
+            <span class="text-gray-500">Los productos necesitan almacenarse en frío.</span>
+          </label>
+        </div>
+
+        <div class="flex items-start">
+          <input
+            id="requiere_control_caducidad"
+            type="checkbox"
+            [(ngModel)]="nuevaCategoria.requiere_control_caducidad"
+            name="requiere_control_caducidad"
+            (change)="onInputChange()"
+            [disabled]="cargando"
+            class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded mt-1">
+          <label for="requiere_control_caducidad" class="ml-3 block text-sm text-gray-700">
+            <span class="font-medium">Requiere control de caducidad</span><br />
+            <span class="text-gray-500">Los productos tienen fecha de vencimiento.</span>
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <!-- Botones -->
+    <div class="flex flex-wrap justify-end gap-3 pt-6 border-t border-gray-200">
+      <button
+        type="button"
+        (click)="cancelar()"
+        [disabled]="cargando"
+        class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-100 transition">
+        Cancelar
+      </button>
+
+      <button
+        type="button"
+        (click)="limpiarFormulario()"
+        [disabled]="cargando"
+        class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-100 transition">
+        Limpiar
+      </button>
+
+      <button
+        type="submit"
+        [disabled]="cargando"
+        class="px-4 py-2 text-sm font-medium text-white bg-blue-600 border border-transparent rounded-md hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:outline-none transition disabled:opacity-50">
+        <span *ngIf="cargando" class="flex items-center gap-2">
+          <svg class="animate-spin h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" />
+            <path class="opacity-75" fill="currentColor"
+              d="M4 12a8 8 0 018-8V0C5.3 0 0 5.3 0 12h4zm2 5.3A7.96 7.96 0 014 12H0c0 3 1.1 5.8 3 7.9l3-2.6z" />
+          </svg>
+          Creando...
+        </span>
+        <span *ngIf="!cargando">Crear Categoría</span>
+      </button>
+    </div>
+  </form>
+</div>

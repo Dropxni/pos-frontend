@@ -1,0 +1,69 @@
+<div class="p-6 max-w-4xl mx-auto bg-white rounded-xl shadow space-y-6">
+  <div>
+    <h1 class="text-3xl font-bold text-gray-900">Editar Proveedor</h1>
+    <p class="text-gray-600 mt-2">Modifica los datos del proveedor seleccionado.</p>
+  </div>
+
+  <div *ngIf="cargando" class="text-gray-500">Cargando datos del proveedor...</div>
+
+  <form *ngIf="!cargando" [formGroup]="proveedorForm" (ngSubmit)="actualizarProveedor()" class="space-y-4">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div>
+        <label class="block text-sm font-medium">Código</label>
+        <input formControlName="codigo" class="input" type="text" required />
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium">Razón Social</label>
+        <input formControlName="razon_social" class="input" type="text" required />
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium">Nombre de Contacto</label>
+        <input formControlName="nombre_contacto" class="input" type="text" required />
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium">Teléfono</label>
+        <input formControlName="telefono" class="input" type="tel" />
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium">Correo Electrónico</label>
+        <input formControlName="email" class="input" type="email" />
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium">Dirección</label>
+        <input formControlName="direccion" class="input" type="text" />
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium">RFC</label>
+        <input formControlName="rfc" class="input" type="text" />
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium">Días de Crédito</label>
+        <input formControlName="dias_credito" class="input" type="number" />
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium">Límite de Crédito</label>
+        <input formControlName="limite_credito" class="input" type="number" />
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium">Activo</label>
+        <input formControlName="activo" type="checkbox" class="mt-2" />
+      </div>
+    </div>
+
+    <div *ngIf="error" class="text-red-500">{{ error }}</div>
+    <div *ngIf="mensaje" class="text-green-600">{{ mensaje }}</div>
+
+    <button type="submit" [disabled]="enviando" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">
+      {{ enviando ? 'Actualizando...' : 'Actualizar Proveedor' }}
+    </button>
+  </form>
+</div>
